@@ -1,0 +1,388 @@
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import secureLocalStorage from "react-secure-storage";
+import api from "../../axios/api";
+
+// ICONS
+import { TiUserAddOutline } from "react-icons/ti";
+import { FaAngleLeft } from "react-icons/fa6";
+import SinglePagePermissions from "./SinglePagePermissions";
+
+const AddRole = () => {
+  // state for role
+  const [role, setRoles] = useState([]);
+  const [pages, setPages] = useState([]);
+  const [permissions, setPermissions] = useState([]);
+  const [roleName, setRoleName] = useState("");
+  const [rolePermission, setRolePermission] = useState([]);
+
+  // All Functions to Fetch Data
+
+  // 1. Fetch All Pages
+  const fetchPages = async () => {
+    try {
+      const response = await api.get(
+        `${import.meta.env.VITE_APP_BASE_URL}/pages/getpages`
+      );
+      setPages(response.data);
+      console.log("pages", response.data);
+    } catch (error) {
+      console.log(error, "Error While Fetching Pages");
+    }
+  };
+
+  // 2. Fetch All Roles
+  const fetchRole = async () => {
+    try {
+      const res = await api.get(
+        `${import.meta.env.VITE_APP_BASE_URL}/role/getroles`
+      );
+      setRoles(res.data);
+      console.log(res.data, "roles");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 3. Fetch All Permissions
+  const fetchPermissions = async () => {
+    try {
+      const res = await api.get(
+        `${import.meta.env.VITE_APP_BASE_URL}/role/getPermissions`
+      );
+      console.log(res.data, "permissions");
+      setPermissions(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRole();
+    fetchPages();
+    fetchPermissions();
+  }, []);
+
+  const handleRolePermissionSubmit = async (e) => {
+    e.preventDefault();
+    console.log(rolePermission);
+  };
+
+  return (
+    <>
+      <div className="midde_cont">
+        <div className="container-fluid">
+          <div className="row column_title">
+            <div className="col-md-12">
+              <div className="page_title">
+                <h2>Settings/AddRole</h2>
+              </div>
+            </div>
+          </div>
+
+          <div className="row column4 graph">
+            {/* Left Section - Roles */}
+            <div className="col-md-5">
+              <div className="white_shd full margin_bottom_30">
+                <div className="full graph_head flex items-center justify-between">
+                  <h2 className="text-2xl font-bold">Roles</h2>
+
+                  <Link
+                    to="/role"
+                    className="bg-green-400 px-4 py-3 rounded-md text-white flex items-center gap-2"
+                  >
+                    <FaAngleLeft className="w-6 h-6" />
+                    <span className="text-xl">Back</span>
+                  </Link>
+                </div>
+                <div className="full progress_bar_inner">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="msg_section">
+                        <div className="msg_list_main">
+                          <ul className="msg_list">
+                            {role.map((data, i) => (
+                              <li key={i}>
+                                <span>
+                                  <span className="name_user">
+                                    {data.roleName}
+                                  </span>
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Section - Add Roles */}
+            <div className="col-md-7">
+              <div className="white_shd full margin_bottom_30">
+                <div className="full graph_head flex items-center justify-between">
+                  <div className="heading1 margin_0">
+                    <h2>Add Roles</h2>
+                  </div>
+
+                  <button
+                    className="px-4 py-3 text-white bg-green-400 rounded-md ml-auto w-fit flex items-center gap-2"
+                    onClick={handleRolePermissionSubmit}
+                  >
+                    <>
+                      <TiUserAddOutline className="h-6 w-6" />
+                      <span>Add Role</span>
+                    </>
+                  </button>
+                </div>
+                <div className="full progress_bar_inner">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <div className="full p-2">
+                        <div className="form-outline mb-4">
+                          <input
+                            type="text"
+                            className="form-control form-control-lg"
+                            placeholder="Enter Role"
+                            value={roleName}
+                            onChange={(e) => {
+                              setRoleName(e.target.value);
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Permission Section */}
+              <div className="col-md-15">
+                <div className="white_shd full margin_bottom_30">
+                  <div className="full graph_head">
+                    <div className="heading1 margin_0">
+                      <h2>Permissions</h2>
+                    </div>
+                  </div>
+                  <div className="table_section padding_infor_info">
+                    <div className="table-responsive-sm">
+                      <table className="table table-hover">
+                        <thead>
+                          <tr>
+                            <th style={{ paddingRight: "20px" }}>Pages</th>
+                            <th style={{ paddingLeft: "20px" }}>Permissions</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          {pages.map((page, i) => (
+                            <SinglePagePermissions
+                              page={page}
+                              permissions={permissions}
+                              setRolePermission={setRolePermission}
+                              key={i}
+                            />
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default AddRole;
+This is my AddRole react vite component for displaying all the pages and the roles associated with it also responsible for adding a new role import React from "react";
+
+const SinglePagePermissions = ({ page, permissions, setRolePermission }) => {
+  return (
+    <>
+      <tr>
+        <td>{page.PageName}</td>
+        <td className="grid grid-cols-4">
+          {permissions.map((permission, i) => (
+            <div key={i}>
+              <input
+                type="checkbox"
+                id={permission.permissionName}
+                name={permission.permissionName}
+                value={permission.permissionID}
+              />
+              <label
+                htmlFor={permission.permissionName}
+                style={{ paddingLeft: "20px" }}
+              >
+                {permission.permissionName}
+              </label>
+            </div>
+          ))}
+        </td>
+      </tr>
+    </>
+  );
+};
+
+export default SinglePagePermissions;
+This is the singlePagePermission for a single row and on mysql database i have the table "permissions" with the columns: 
+permissionID	
+permissionName	, i have a table "roles" with columns 
+roleid	
+roleName, i have a table "userrolepagepermission" with columns 
+id	
+userid	
+roleid	
+pageid	
+permissionid, i have a table called "pages" with columns 
+PageID	
+PageName, exports.getRoles = function (req, res) {
+  try {
+    RoleModel.getRoles(function (err, data) {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      } else {
+        res.json(data);
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};this is the controller function to get all roles var getRoles = function (callback) {
+  var query = "Select * From role";
+  db.query(query, function (err, result) {
+    if (err) {
+      return callback(err, null);
+    } else {
+      return callback(null, result);
+    }
+  });
+};and this is the model to get all roles, var createRolewithPagePermission = async function (
+  roleName,
+  userRolePagePermission
+) {
+  try {
+    var connection = db;
+
+    // Start the transaction
+    await new Promise(function (resolve, reject) {
+      connection.beginTransaction(function (error) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    try {
+      // Create Role
+      var role = await new Promise(function (resolve, reject) {
+        var query = "INSERT INTO role (roleName) VALUES(?)";
+        return connection.query(query, [roleName], function (err, result) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      });
+
+      var userRolePagePermissionPromises = userRolePagePermission.map(function (
+        permission
+      ) {
+        var pageid = permission.pageid,
+          permissionid = permission.permissionid;
+
+        return permissionid.map(function (pid) {
+          return new Promise(function (resolve, reject) {
+            var query =
+              "INSERT INTO userrolepermission (userid,roleid, pageid, permissionid) VALUES (1, ?, ?, ?)";
+            connection.query(
+              query,
+              [role.insertId, pageid, pid],
+              function (err, result) {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(result);
+                }
+              }
+            );
+          });
+        });
+      });
+
+      await Promise.all(userRolePagePermissionPromises);
+
+      // Commit the transaction
+      await new Promise(function (resolve, reject) {
+        connection.commit(function (error) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+      });
+
+      return { message: "Role with Page Permission created successfully" };
+    } catch (error) {
+      // Rollback the transaction in case of an error
+      await new Promise(function (resolve) {
+        connection.rollback(function () {
+          resolve();
+        });
+      });
+      throw error;
+    }
+  } catch (error) {
+    console.error("Error creating Role with Page Permission:", error);
+    throw new Error("Internal Server Error");
+  }
+};
+this is the model function to create a role along with assigning role permissions to pages with it exports.rolePagePermission = async function (req, res) {
+  var roleName = req.body.roleName;
+  var userrolepagepermission = req.body.userrolepagepermission;
+  console.log("Request Body:", req.body); // Add this line for logging
+
+  try {
+    var result = await RoleModel.createRolewithPagePermission(
+      roleName,
+      userrolepagepermission
+    );
+    console.log("Result:", result); // Add this line for logging
+    res.status(201).json(result);
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};and this is the controller function for it. exports.getAllPermissions = async (req, res) => {
+  try {
+    const permissions = await RolesModel.getAllPermissions();
+    res.json(permissions);
+  } catch (error) {
+    console.error("Error getting all permissions:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
+};
+this is the controller to get all permissions var getAllPermissions = async function () {
+  var query = "SELECT * FROM permissions";
+  return new Promise(function (resolve, reject) {
+    db.query(query, function (err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+and this is the model function for it, Now what I want is that I want to modify my AddRole Component, Initially its well structured However, what I want is that I be able to add a new role, like when I select the permissions for the pages (for any number of pages like i can have multiple permissions selected for multiple pages), and then i click the add role button, that adds the role with the roleid with the permissions (permission id) to my database respective table

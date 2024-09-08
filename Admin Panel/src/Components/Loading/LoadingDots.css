@@ -1,0 +1,36 @@
+/* LoadingDots.css */
+
+.loading-dots-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Takes full viewport height, adjust as needed */
+}
+
+.dot {
+  width: 20px;
+  height: 20px;
+  margin: 0 5px;
+  border-radius: 50%;
+  background-color: #007bff; /* Change the dot color as you like */
+  animation: blink 2s infinite;
+}
+
+.dot-2 {
+  animation-delay: 0.2s;
+}
+
+.dot-3 {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%,
+  50%,
+  100% {
+    opacity: 0.2;
+  }
+  25% {
+    opacity: 1;
+  }
+}

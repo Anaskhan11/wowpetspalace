@@ -1,0 +1,39 @@
+/* FILEPATH: /c:/Users/Huzaifa/Documents/projects/wowpetspalace/admin/src/index.css */
+
+/* BEGIN: abpxx6d04wxr */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+p {
+  font-family: "Montserrat";
+  @apply my-4 text-2xl font-normal;
+  font-weight: 500;
+}
+
+.thumbs-wrapper {
+  display: none;
+}
+
+.sidebar {
+  /* END: abpxx6d04wxr */
+
+  /* BEGIN: be15d9bcejpp */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: transparent transparent; /* Firefox */
+  /* END: be15d9bcejpp */
+}
