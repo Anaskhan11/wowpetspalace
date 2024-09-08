@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+label > input {
+  display: block;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Hide the scrollbar but allow scrolling */
+.overflow-hidden-scroll {
+  scrollbar-width: calc(2px-1px);
+  -ms-overflow-style: none;
+  overflow: scroll;
+}
+
+.overflow-hidden-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.thumbs-wrapper {
+  display: none;
+}
+
+@-moz-document url-prefix() {
+  .overflow-hidden-scroll {
+    scrollbar-width: calc(2px-1px);
+    -ms-overflow-style: none;
+    overflow: scroll;
+  }
+
+  .overflow-hidden-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .thumbs-wrapper {
+    display: none;
+  }
+}
+
+.main-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 350px;
+  overflow-y: auto;
+  transition: 0.3s;
+  scrollbar-color: transparent transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins";
+}
+p {
+  font-family: "Montserrat";
+}
+
+.privacy-image {
+  background-image: url("../public/privacyPolicy.svg");
+  @apply h-72 w-full object-cover object-center;
+}
+
+.description-truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

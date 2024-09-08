@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteBase /
+
+# Serve the directory if it exists
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Otherwise, serve index.html
+RewriteRule ^ /beta/index.html [L]
+
+# when deploying to the main wowpetspalace website remove the /beta from the above line
